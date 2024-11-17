@@ -15,7 +15,7 @@ async function main() {
         });
     }
     catch (error) {
-        console.error("Error connecting to the database:", error);
+        console.error('Error connecting to the database:', error);
         process.exit(1); // Exit the process with a failure code
     }
 }
