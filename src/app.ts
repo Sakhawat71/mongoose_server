@@ -7,7 +7,7 @@ import cors from 'cors';
 app.use(express.json());
 app.use(cors());
 
-app.use('/api/v1/students',studentRouter)
+app.use('/api/v1/students',studentRouter);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World');
