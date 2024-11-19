@@ -20,7 +20,7 @@ const courseSchema = new Schema<ICourses>({
   courseName: { type: String, required: true },
   instructor: { type: String, required: true },
   credits: { type: Number, required: true },
-  grade: { type: String }, // Optional field
+  grade: { type: String }, 
 });
 
 const scholarshipsSchema = new Schema<IScholarships>({
@@ -35,7 +35,7 @@ const attendanceSchema = new Schema<IAttendanceRecords>({
 });
 
 export const studentSchema = new Schema<IStudent>({
-  id: { type: String, required: true },
+  id: { type: String, required: true , unique : true},
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   dateOfBirth: { type: String, required: true },
