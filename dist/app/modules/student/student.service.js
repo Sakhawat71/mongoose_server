@@ -7,7 +7,7 @@ const createStudentIntoDb = async (student) => {
     const resutl = await student_model_1.StudentModel.create(student);
     return resutl;
 };
-// get all students 
+// get all students
 const getAllStudentsFormDb = async () => {
     const result = await student_model_1.StudentModel.find();
     return result;

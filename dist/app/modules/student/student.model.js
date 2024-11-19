@@ -14,7 +14,7 @@ const courseSchema = new mongoose_1.Schema({
     courseName: { type: String, required: true },
     instructor: { type: String, required: true },
     credits: { type: Number, required: true },
-    grade: { type: String }, // Optional field
+    grade: { type: String },
 });
 const scholarshipsSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
@@ -25,15 +25,41 @@ const attendanceSchema = new mongoose_1.Schema({
     date: { type: String, required: true },
     status: { type: String, enum: ['Present', 'Absent', 'Late'], required: true },
 });
+const nameSchema = new mongoose_1.Schema({
+    firstName: {
+        type: String,
+        required: [true, 'First name is required'],
+        maxlength: [20, 'First name cannot be longer than 20 characters'],
+        minlength: [2, 'First name must be at least 2 characters'],
+        trim: true,
+    },
+    middleName: {
+        type: String,
+        trim: true,
+        default: '',
+    },
+    lastName: {
+        type: String,
+        required: [true, 'Last name is required'],
+        maxlength: [20, 'Last name cannot be longer than 20 characters'],
+        minlength: [2, 'Last name must be at least 2 characters'],
+        trim: true,
+    },
+});
 exports.studentSchema = new mongoose_1.Schema({
-    id: { type: String, required: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    id: { type: String, required: true, unique: true },
+    name: {
+        type: nameSchema,
+        required: true,
+    },
     dateOfBirth: { type: String, required: true },
     gender: { type: String, enum: ['Male', 'Female', 'Other'], required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     phoneNumber: { type: String },
-    address: { type: addressSchema, require: true },
+    address: {
+        type: addressSchema,
+        require: true
+    },
     enrollmentDate: { type: String, required: true },
     graduationDate: { type: String },
     courses: [courseSchema],

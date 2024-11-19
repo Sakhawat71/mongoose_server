@@ -5,6 +5,7 @@ import {
   ICourses,
   IScholarships,
   IAttendanceRecords,
+  TName,
 } from './student.interface';
 
 const addressSchema = new Schema<IAddress>({
@@ -20,7 +21,7 @@ const courseSchema = new Schema<ICourses>({
   courseName: { type: String, required: true },
   instructor: { type: String, required: true },
   credits: { type: Number, required: true },
-  grade: { type: String }, 
+  grade: { type: String },
 });
 
 const scholarshipsSchema = new Schema<IScholarships>({
@@ -34,15 +35,42 @@ const attendanceSchema = new Schema<IAttendanceRecords>({
   status: { type: String, enum: ['Present', 'Absent', 'Late'], required: true },
 });
 
+const nameSchema = new Schema<TName>({
+  firstName: {
+    type: String,
+    required: [true, 'First name is required'],
+    maxlength: [20, 'First name cannot be longer than 20 characters'],
+    minlength: [2, 'First name must be at least 2 characters'],
+    trim: true,
+  },
+  middleName: {
+    type: String,
+    trim: true,
+    default: '',
+  },
+  lastName: {
+    type: String,
+    required: [true, 'Last name is required'],
+    maxlength: [20, 'Last name cannot be longer than 20 characters'],
+    minlength: [2, 'Last name must be at least 2 characters'],
+    trim: true,
+  },
+})
+
 export const studentSchema = new Schema<IStudent>({
-  id: { type: String, required: true , unique : true},
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  id: { type: String, required: true, unique: true },
+  name: {
+    type: nameSchema,
+    required: true,
+  },
   dateOfBirth: { type: String, required: true },
   gender: { type: String, enum: ['Male', 'Female', 'Other'], required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   phoneNumber: { type: String },
-  address: { type: addressSchema, require: true },
+  address: {
+    type: addressSchema,
+    require: true
+  },
   enrollmentDate: { type: String, required: true },
   graduationDate: { type: String },
   courses: [courseSchema],

@@ -14,7 +14,7 @@ const createStudent = async (req, res) => {
         });
     }
     catch (error) {
-        console.log(" we get error in controller ", error);
+        console.log(' we get error in controller ', error);
     }
 };
 // get all students
