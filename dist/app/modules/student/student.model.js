@@ -41,6 +41,13 @@ const nameSchema = new mongoose_1.Schema({
         maxlength: [20, 'First name cannot be longer than 20 characters'],
         minlength: [2, 'First name must be at least 2 characters'],
         trim: true,
+        validate: {
+            validator: function (value) {
+                const validName = value.charAt(0).toUpperCase() + value.slice(1);
+                return validName === value;
+            },
+            message: '{VALUE} is not capitalize format'
+        },
     },
     middleName: {
         type: String,

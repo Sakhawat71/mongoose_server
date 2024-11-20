@@ -14,7 +14,6 @@ const createStudent = async (req, res) => {
         });
     }
     catch (error) {
-        // console.log(' we get error in controller ', error);
         res.status(500).json({
             seccess: false,
             message: 'Student can`t created',
