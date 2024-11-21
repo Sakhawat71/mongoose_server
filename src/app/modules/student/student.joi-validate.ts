@@ -145,3 +145,43 @@ export const studentJoiSchema = Joi.object({
         'any.required': 'Updated at date is required',
     }),
 });
+
+/**
+ * 
+ 
+import { studentJoiSchema } from './student.joi-validate';
+
+
+// create singel student
+const createStudent = async (req: Request, res: Response) => {
+    try {
+
+        const { student: studentData } = req.body;
+
+        const { error,value } = studentJoiSchema.validate(studentData);
+        if (error) {
+            return res.status(400).json({
+                success: false,
+                message: 'Validation failed for student data',
+                error: error.details,
+            });
+        }
+
+        const result = await studentServices.createStudentIntoDb(value);
+
+        res.status(201).json({
+            seccess: true,
+            message: 'Student is created succesfully',
+            data: result,
+        });
+    } catch (error) {
+        res.status(400).json({
+            seccess: false,
+            message: 'Student can`t created',
+            data: error,
+        });
+    }
+};
+
+
+ */

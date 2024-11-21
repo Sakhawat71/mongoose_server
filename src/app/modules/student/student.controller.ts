@@ -1,20 +1,28 @@
 import { Request, Response } from 'express';
 import { studentServices } from './student.service';
-import { studentJoiSchema } from './student.joi-validate';
+import { z } from 'zod'
 
 // create singel student
 const createStudent = async (req: Request, res: Response) => {
     try {
+
+        const studentZodValidation = z.object({
+            id: z.string(),
+            name: z.object({
+                firstName: z.string().max(20)
+            })
+        })
+
         const { student: studentData } = req.body;
 
-        const { error } = studentJoiSchema.validate(studentData);
-        if (error) {
-            return res.status(400).json({
-                success: false,
-                message: 'Validation failed for student data',
-                error: error.details,
-            });
-        }
+        // const { error,value } = studentJoiSchema.validate(studentData);
+        // if (error) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: 'Validation failed for student data',
+        //         error: error.details,
+        //     });
+        // }
 
         const result = await studentServices.createStudentIntoDb(studentData);
 
