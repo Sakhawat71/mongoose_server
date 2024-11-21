@@ -9,18 +9,11 @@ const createStudent = async (req, res) => {
         const studentZodValidation = zod_1.z.object({
             id: zod_1.z.string(),
             name: zod_1.z.object({
-                firstName: zod_1.z.string().max(20)
+                firstName: zod_1.z.string().max(20),
+                MiddleName: zod_1.z.string().max(20),
             })
         });
         const { student: studentData } = req.body;
-        // const { error,value } = studentJoiSchema.validate(studentData);
-        // if (error) {
-        //     return res.status(400).json({
-        //         success: false,
-        //         message: 'Validation failed for student data',
-        //         error: error.details,
-        //     });
-        // }
         const result = await student_service_1.studentServices.createStudentIntoDb(studentData);
         res.status(201).json({
             seccess: true,
