@@ -2,19 +2,28 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.studentControllers = void 0;
 const student_service_1 = require("./student.service");
+const student_joi_validate_1 = require("./student.joi-validate");
 // create singel student
 const createStudent = async (req, res) => {
     try {
         const { student: studentData } = req.body;
+        const { error } = student_joi_validate_1.studentJoiSchema.validate(studentData);
+        if (error) {
+            return res.status(400).json({
+                success: false,
+                message: 'Validation failed for student data',
+                error: error.details,
+            });
+        }
         const result = await student_service_1.studentServices.createStudentIntoDb(studentData);
-        res.status(200).json({
+        res.status(201).json({
             seccess: true,
             message: 'Student is created succesfully',
             data: result,
         });
     }
     catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             seccess: false,
             message: 'Student can`t created',
             data: error,
