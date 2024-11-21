@@ -8,7 +8,9 @@ const createStudent = async (req, res) => {
     try {
         const studentZodValidation = zod_1.z.object({
             id: zod_1.z.string(),
-            name: zod_1.z.object({})
+            name: zod_1.z.object({
+                firstName: zod_1.z.string().max(20)
+            })
         });
         const { student: studentData } = req.body;
         // const { error,value } = studentJoiSchema.validate(studentData);
