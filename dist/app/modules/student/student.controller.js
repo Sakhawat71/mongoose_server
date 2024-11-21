@@ -2,19 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.studentControllers = void 0;
 const student_service_1 = require("./student.service");
-const zod_1 = require("zod");
+const student_zod_validation_1 = require("./student.zod-validation");
 // create singel student
 const createStudent = async (req, res) => {
     try {
-        const studentZodValidation = zod_1.z.object({
-            id: zod_1.z.string(),
-            name: zod_1.z.object({
-                firstName: zod_1.z.string().max(20),
-                MiddleName: zod_1.z.string().max(20),
-            })
-        });
         const { student: studentData } = req.body;
-        const result = await student_service_1.studentServices.createStudentIntoDb(studentData);
+        // data validation useing zod validator
+        const validatData = student_zod_validation_1.studentZodSchema.parse(studentData);
+        const result = await student_service_1.studentServices.createStudentIntoDb(validatData);
         res.status(201).json({
             seccess: true,
             message: 'Student is created succesfully',

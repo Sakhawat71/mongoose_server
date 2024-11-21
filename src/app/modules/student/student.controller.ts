@@ -1,22 +1,17 @@
 import { Request, Response } from 'express';
 import { studentServices } from './student.service';
-import { z } from 'zod'
+import { studentZodSchema } from './student.zod-validation';
 
 // create singel student
 const createStudent = async (req: Request, res: Response) => {
     try {
 
-        const studentZodValidation = z.object({
-            id: z.string(),
-            name: z.object({
-                firstName: z.string().max(20),
-                MiddleName : z.string().max(20),
-            })
-        })
-
         const { student: studentData } = req.body;
+        
+        // data validation useing zod validator
+        const validatData = studentZodSchema.parse(studentData);
 
-        const result = await studentServices.createStudentIntoDb(studentData);
+        const result = await studentServices.createStudentIntoDb(validatData);
 
         res.status(201).json({
             seccess: true,

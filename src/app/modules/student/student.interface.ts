@@ -27,7 +27,7 @@ export interface IAttendanceRecords {
 
 export type TName = {
     firstName: string;
-    middleName: string;
+    middleName?: string | undefined;
     lastName: string;
 }
 
