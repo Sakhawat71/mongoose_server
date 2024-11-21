@@ -7,6 +7,7 @@ import {
     IAttendanceRecords,
     TName,
 } from './student.interface';
+import validator from 'validator';
 
 // Address Schema
 const addressSchema = new Schema<IAddress>({
@@ -56,7 +57,7 @@ const nameSchema = new Schema<TName>({
                 const validName = value.charAt(0).toUpperCase() + value.slice(1);
                 return validName === value;
             },
-            message : '{VALUE} is not capitalize format'
+            message: '{VALUE} is not capitalize format'
         },
     },
     middleName: {
@@ -70,28 +71,22 @@ const nameSchema = new Schema<TName>({
         maxlength: [20, 'Last name cannot be longer than 20 characters'],
         minlength: [2, 'Last name must be at least 2 characters'],
         trim: true,
+        validate: {
+            validator: (value : string) => validator.isAlpha(value) ,
+            message: '{VALUE} is not valid type'
+        }
     },
 });
 
 // Student Schema
 export const studentSchema = new Schema<IStudent>({
     id: { type: String, required: [true, 'Student ID is required'], unique: true },
-    name: {
-        type: nameSchema,
-        required: [true, 'Student name is required'],
-    },
+    name: { type: nameSchema, required: [true, 'Student name is required'], },
     dateOfBirth: { type: String, required: [true, 'Date of birth is required'] },
-    gender: {
-        type: String,
-        enum: ['Male', 'Female', 'Other'],
-        required: [true, 'Gender is required']
-    },
+    gender: { type: String, enum: ['Male', 'Female', 'Other'], required: [true, 'Gender is required'] },
     email: { type: String, required: [true, 'Email is required'], unique: true },
     phoneNumber: { type: String },
-    address: {
-        type: addressSchema,
-        required: [true, 'Address is required'],
-    },
+    address: { type: addressSchema, required: [true, 'Address is required'],},
     enrollmentDate: { type: String, required: [true, 'Enrollment date is required'] },
     graduationDate: { type: String },
     courses: [courseSchema],

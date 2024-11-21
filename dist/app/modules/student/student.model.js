@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StudentModel = exports.studentSchema = void 0;
 const mongoose_1 = require("mongoose");
+const validator_1 = __importDefault(require("validator"));
 // Address Schema
 const addressSchema = new mongoose_1.Schema({
     street: { type: String, required: [true, 'Street address is required'] },
@@ -60,27 +64,21 @@ const nameSchema = new mongoose_1.Schema({
         maxlength: [20, 'Last name cannot be longer than 20 characters'],
         minlength: [2, 'Last name must be at least 2 characters'],
         trim: true,
+        validate: {
+            validator: (value) => validator_1.default.isAlpha(value),
+            message: '{VALUE} is not valid type'
+        }
     },
 });
 // Student Schema
 exports.studentSchema = new mongoose_1.Schema({
     id: { type: String, required: [true, 'Student ID is required'], unique: true },
-    name: {
-        type: nameSchema,
-        required: [true, 'Student name is required'],
-    },
+    name: { type: nameSchema, required: [true, 'Student name is required'], },
     dateOfBirth: { type: String, required: [true, 'Date of birth is required'] },
-    gender: {
-        type: String,
-        enum: ['Male', 'Female', 'Other'],
-        required: [true, 'Gender is required']
-    },
+    gender: { type: String, enum: ['Male', 'Female', 'Other'], required: [true, 'Gender is required'] },
     email: { type: String, required: [true, 'Email is required'], unique: true },
     phoneNumber: { type: String },
-    address: {
-        type: addressSchema,
-        required: [true, 'Address is required'],
-    },
+    address: { type: addressSchema, required: [true, 'Address is required'], },
     enrollmentDate: { type: String, required: [true, 'Enrollment date is required'] },
     graduationDate: { type: String },
     courses: [courseSchema],
