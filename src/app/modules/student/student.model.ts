@@ -72,7 +72,7 @@ const nameSchema = new Schema<TName>({
         minlength: [2, 'Last name must be at least 2 characters'],
         trim: true,
         validate: {
-            validator: (value : string) => validator.isAlpha(value) ,
+            validator: (value: string) => validator.isAlpha(value),
             message: '{VALUE} is not valid type'
         }
     },
@@ -86,7 +86,7 @@ export const studentSchema = new Schema<IStudent>({
     gender: { type: String, enum: ['Male', 'Female', 'Other'], required: [true, 'Gender is required'] },
     email: { type: String, required: [true, 'Email is required'], unique: true },
     phoneNumber: { type: String },
-    address: { type: addressSchema, required: [true, 'Address is required'],},
+    address: { type: addressSchema, required: [true, 'Address is required'], },
     enrollmentDate: { type: String, required: [true, 'Enrollment date is required'] },
     graduationDate: { type: String },
     courses: [courseSchema],
@@ -101,6 +101,18 @@ export const studentSchema = new Schema<IStudent>({
     createdAt: { type: String, required: [true, 'Created at date is required'] },
     updatedAt: { type: String, required: [true, 'Updated at date is required'] },
 });
+
+
+// pre save middleware
+studentSchema.pre('save', function () {
+    console.log(this, "pre hook : we will save to data");
+    
+})
+
+studentSchema.post('save', function () {
+    console.log(this, "post hook : we save to data");
+})
+
 
 // Exporting Student Model
 export const StudentModel = model<IStudent>('Student', studentSchema);

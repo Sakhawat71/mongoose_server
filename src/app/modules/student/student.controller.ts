@@ -39,7 +39,11 @@ const getAllStudents = async (req: Request, res: Response) => {
             data: result,
         });
     } catch (error) {
-        console.log(error);
+        res.status(400).json({
+            seccess: false,
+            message: 'Can`t get Students data',
+            data: error,
+        });
     }
 };
 

@@ -93,5 +93,12 @@ exports.studentSchema = new mongoose_1.Schema({
     createdAt: { type: String, required: [true, 'Created at date is required'] },
     updatedAt: { type: String, required: [true, 'Updated at date is required'] },
 });
+// pre save middleware
+exports.studentSchema.pre('save', function () {
+    console.log(this, "pre hook : we will save to data");
+});
+exports.studentSchema.post('save', function () {
+    console.log(this, "post hook : we save to data");
+});
 // Exporting Student Model
 exports.StudentModel = (0, mongoose_1.model)('Student', exports.studentSchema);

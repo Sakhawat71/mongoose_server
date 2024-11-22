@@ -35,7 +35,11 @@ const getAllStudents = async (req, res) => {
         });
     }
     catch (error) {
-        console.log(error);
+        res.status(400).json({
+            seccess: false,
+            message: 'Can`t get Students data',
+            data: error,
+        });
     }
 };
 // get single student data by id
