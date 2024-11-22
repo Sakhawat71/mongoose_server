@@ -107,17 +107,21 @@ export const studentSchema = new Schema<IStudent>({
 
 
 // pre save middleware
-studentSchema.pre('save', async function () {
-
+studentSchema.pre('save', async function (next) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const user = this;
-    user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_rounds))
-
-
+    user.password = await bcrypt.hash(
+        user.password,
+        Number(config.bcrypt_salt_rounds)
+    );
+    next();
 })
 
-studentSchema.post('save', function () {
-    console.log(this.password, "post hook : we changed password");
+
+// post save middleware
+studentSchema.post('save', function (doc, next) {
+    doc.password = "";
+    next()
 })
 
 

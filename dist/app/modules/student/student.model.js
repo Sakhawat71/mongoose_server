@@ -97,13 +97,16 @@ exports.studentSchema = new mongoose_1.Schema({
     updatedAt: { type: String, required: [true, 'Updated at date is required'] },
 });
 // pre save middleware
-exports.studentSchema.pre('save', async function () {
+exports.studentSchema.pre('save', async function (next) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const user = this;
     user.password = await bcrypt_1.default.hash(user.password, Number(config_1.default.bcrypt_salt_rounds));
+    next();
 });
-exports.studentSchema.post('save', function () {
-    console.log(this.password, "post hook : we changed password");
+// post save middleware
+exports.studentSchema.post('save', function (doc, next) {
+    doc.password = "";
+    next();
 });
 // Exporting Student Model
 exports.StudentModel = (0, mongoose_1.model)('Student', exports.studentSchema);
