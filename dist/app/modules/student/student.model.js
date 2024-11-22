@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StudentModel = exports.studentSchema = void 0;
 const mongoose_1 = require("mongoose");
 const validator_1 = __importDefault(require("validator"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const config_1 = __importDefault(require("../../config"));
 // Address Schema
 const addressSchema = new mongoose_1.Schema({
     street: { type: String, required: [true, 'Street address is required'] },
@@ -73,6 +75,7 @@ const nameSchema = new mongoose_1.Schema({
 // Student Schema
 exports.studentSchema = new mongoose_1.Schema({
     id: { type: String, required: [true, 'Student ID is required'], unique: true },
+    password: { type: String, required: [true, 'Password is required'] },
     name: { type: nameSchema, required: [true, 'Student name is required'], },
     dateOfBirth: { type: String, required: [true, 'Date of birth is required'] },
     gender: { type: String, enum: ['Male', 'Female', 'Other'], required: [true, 'Gender is required'] },
@@ -94,11 +97,13 @@ exports.studentSchema = new mongoose_1.Schema({
     updatedAt: { type: String, required: [true, 'Updated at date is required'] },
 });
 // pre save middleware
-exports.studentSchema.pre('save', function () {
-    console.log(this, "pre hook : we will save to data");
+exports.studentSchema.pre('save', async function () {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this;
+    user.password = await bcrypt_1.default.hash(user.password, Number(config_1.default.bcrypt_salt_rounds));
 });
 exports.studentSchema.post('save', function () {
-    console.log(this, "post hook : we save to data");
+    console.log(this.password, "post hook : we changed password");
 });
 // Exporting Student Model
 exports.StudentModel = (0, mongoose_1.model)('Student', exports.studentSchema);

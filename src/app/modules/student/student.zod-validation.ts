@@ -56,6 +56,7 @@ const nameZodSchema = z.object({
 // Main Student Schema
 const studentZodSchema = z.object({
   id: z.string().min(1, 'Student ID is required'),
+  password: z.string().min(6, 'Password is required').max(20),
   name: nameZodSchema,
   dateOfBirth: z.string().min(1, 'Date of birth is required'),
   gender: z.enum(['Male', 'Female', 'Other'], { required_error: 'Gender is required' }),

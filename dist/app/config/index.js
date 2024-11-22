@@ -10,4 +10,5 @@ dotenv_1.default.config({ path: path_1.default.join(process.cwd(), '.env') });
 exports.default = {
     port: process.env.PORT,
     db_url: process.env.DATABASE_URL,
+    bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
 };

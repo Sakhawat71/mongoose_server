@@ -8,6 +8,8 @@ import {
     TName,
 } from './student.interface';
 import validator from 'validator';
+import bcrypt from 'bcrypt'
+import config from '../../config';
 
 // Address Schema
 const addressSchema = new Schema<IAddress>({
@@ -81,6 +83,7 @@ const nameSchema = new Schema<TName>({
 // Student Schema
 export const studentSchema = new Schema<IStudent>({
     id: { type: String, required: [true, 'Student ID is required'], unique: true },
+    password: { type: String, required: [true, 'Password is required'] },
     name: { type: nameSchema, required: [true, 'Student name is required'], },
     dateOfBirth: { type: String, required: [true, 'Date of birth is required'] },
     gender: { type: String, enum: ['Male', 'Female', 'Other'], required: [true, 'Gender is required'] },
@@ -104,13 +107,17 @@ export const studentSchema = new Schema<IStudent>({
 
 
 // pre save middleware
-studentSchema.pre('save', function () {
-    console.log(this, "pre hook : we will save to data");
-    
+studentSchema.pre('save', async function () {
+
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this;
+    user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_rounds))
+
+
 })
 
 studentSchema.post('save', function () {
-    console.log(this, "post hook : we save to data");
+    console.log(this.password, "post hook : we changed password");
 })
 
 

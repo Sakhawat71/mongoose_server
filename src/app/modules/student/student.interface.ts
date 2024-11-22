@@ -33,6 +33,7 @@ export type TName = {
 
 export interface IStudent {
     id: string;
+    password: string;
     name: TName;
     dateOfBirth: string;
     gender: 'Male' | 'Female' | 'Other';
