@@ -44,16 +44,45 @@ const getAllStudents = async (req, res) => {
 };
 // get single student data by id
 const getStudentById = async (req, res) => {
-    const { studentId } = req.params;
-    const result = await student_service_1.studentServices.singleStudentFromDb(studentId);
-    res.status(200).json({
-        success: true,
-        message: `get student by ${studentId}`,
-        data: result,
-    });
+    try {
+        const { studentId } = req.params;
+        const result = await student_service_1.studentServices.singleStudentFromDb(studentId);
+        res.status(200).json({
+            success: true,
+            message: `get student by ${studentId}`,
+            data: result,
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            seccess: false,
+            message: 'Can`t get Individual Students data',
+            data: error,
+        });
+    }
+};
+// delate (update as delete) student
+const deleteStudentById = async (req, res) => {
+    try {
+        const { studentId } = req.params;
+        const result = await student_service_1.studentServices.deleteStudentFromDb(studentId);
+        res.status(200).json({
+            success: true,
+            message: `delete student by id : ${studentId}`,
+            data: result,
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            seccess: false,
+            message: 'Can`t get Individual Students data',
+            data: error,
+        });
+    }
 };
 exports.studentControllers = {
     createStudent,
     getAllStudents,
     getStudentById,
+    deleteStudentById,
 };

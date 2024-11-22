@@ -53,6 +53,7 @@ export interface IStudent {
     notes?: string[];
     createdAt: string;
     updatedAt: string;
+    isDeleted: boolean;
 }
 
 // export default IStudent;

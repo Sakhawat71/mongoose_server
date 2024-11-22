@@ -76,6 +76,7 @@ const studentZodSchema = z.object({
   notes: z.array(z.string()).optional(),
   createdAt: z.string().min(1, 'Created at date is required'),
   updatedAt: z.string().min(1, 'Updated at date is required'),
+  isDeleted : z.boolean(),
 });
 
 // Export Zod Schema

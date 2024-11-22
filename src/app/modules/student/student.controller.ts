@@ -7,7 +7,7 @@ const createStudent = async (req: Request, res: Response) => {
     try {
 
         const { student: studentData } = req.body;
-        
+
         // data validation useing zod validator
         const validatData = studentZodSchema.parse(studentData);
 
@@ -50,18 +50,49 @@ const getAllStudents = async (req: Request, res: Response) => {
 // get single student data by id
 
 const getStudentById = async (req: Request, res: Response) => {
-    const { studentId } = req.params;
-    const result = await studentServices.singleStudentFromDb(studentId);
+    try {
+        const { studentId } = req.params;
+        const result = await studentServices.singleStudentFromDb(studentId);
 
-    res.status(200).json({
-        success: true,
-        message: `get student by ${studentId}`,
-        data: result,
-    });
+        res.status(200).json({
+            success: true,
+            message: `get student by ${studentId}`,
+            data: result,
+        });
+    } catch (error) {
+        res.status(400).json({
+            seccess: false,
+            message: 'Can`t get Individual Students data',
+            data: error,
+        });
+    }
 };
+
+
+// delate (update as delete) student
+
+const deleteStudentById = async (req: Request, res: Response) => {
+    try {
+        const { studentId } = req.params;
+        const result = await studentServices.deleteStudentFromDb(studentId);
+
+        res.status(200).json({
+            success: true,
+            message: `delete student by id : ${studentId}`,
+            data: result,
+        });
+    } catch (error) {
+        res.status(400).json({
+            seccess: false,
+            message: 'Can`t get Individual Students data',
+            data: error,
+        });
+    }
+}
 
 export const studentControllers = {
     createStudent,
     getAllStudents,
     getStudentById,
+    deleteStudentById,
 };

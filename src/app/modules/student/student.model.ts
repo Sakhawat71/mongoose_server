@@ -103,6 +103,7 @@ export const studentSchema = new Schema<IStudent>({
     notes: { type: [String] },
     createdAt: { type: String, required: [true, 'Created at date is required'] },
     updatedAt: { type: String, required: [true, 'Updated at date is required'] },
+    isDeleted: {type : Boolean, default: false}
 });
 
 

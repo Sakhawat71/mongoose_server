@@ -95,6 +95,7 @@ exports.studentSchema = new mongoose_1.Schema({
     notes: { type: [String] },
     createdAt: { type: String, required: [true, 'Created at date is required'] },
     updatedAt: { type: String, required: [true, 'Updated at date is required'] },
+    isDeleted: { type: Boolean, default: false }
 });
 // pre save middleware
 exports.studentSchema.pre('save', async function (next) {
