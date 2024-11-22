@@ -96,6 +96,15 @@ exports.studentSchema = new mongoose_1.Schema({
     createdAt: { type: String, required: [true, 'Created at date is required'] },
     updatedAt: { type: String, required: [true, 'Updated at date is required'] },
     isDeleted: { type: Boolean, default: false }
+}, {
+    toJSON: {
+        virtuals: true
+    }
+});
+// virtual 
+exports.studentSchema.virtual("fullName").get(function () {
+    const name = this.name;
+    return name.firstName + ' ' + name.middleName + ' ' + name.lastName;
 });
 // pre save middleware
 exports.studentSchema.pre('save', async function (next) {
@@ -107,6 +116,22 @@ exports.studentSchema.pre('save', async function (next) {
 // post save middleware
 exports.studentSchema.post('save', function (doc, next) {
     doc.password = "";
+    next();
+});
+// query middleware
+// find all
+exports.studentSchema.pre('find', function (next) {
+    this.find({ isDeleted: { $ne: true } });
+    next();
+});
+// find one
+exports.studentSchema.pre('findOne', function (next) {
+    this.find({ isDeleted: { $ne: true } });
+    next();
+});
+// aggregate block
+exports.studentSchema.pre('aggregate', function (next) {
+    this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
     next();
 });
 // Exporting Student Model

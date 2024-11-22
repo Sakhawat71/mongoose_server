@@ -21,6 +21,9 @@ const singleStudentFromDb = async (id: string) => {
 
 // update as deleted
 const deleteStudentFromDb = async (id: string) => {
+  // const result = await StudentModel.aggregate([
+  //   {$match : {id : id}}
+  // ])
   const result = await StudentModel.updateOne({ id }, { isDeleted: true });
   return result;
 }

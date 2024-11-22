@@ -103,8 +103,19 @@ export const studentSchema = new Schema<IStudent>({
     notes: { type: [String] },
     createdAt: { type: String, required: [true, 'Created at date is required'] },
     updatedAt: { type: String, required: [true, 'Updated at date is required'] },
-    isDeleted: {type : Boolean, default: false}
+    isDeleted: { type: Boolean, default: false }
+},{
+    toJSON : {
+        virtuals : true
+    }
 });
+
+// virtual 
+studentSchema.virtual("fullName").get(function () {
+    const name = this.name;
+    return name.firstName + ' ' + name.middleName + ' ' + name.lastName
+})
+
 
 
 // pre save middleware
@@ -125,6 +136,24 @@ studentSchema.post('save', function (doc, next) {
     next()
 })
 
+// query middleware
+// find all
+studentSchema.pre('find', function (next) {
+    this.find({ isDeleted: { $ne: true } })
+    next()
+})
+
+// find one
+studentSchema.pre('findOne', function (next) {
+    this.find({ isDeleted: { $ne: true } })
+    next()
+})
+
+// aggregate block
+studentSchema.pre('aggregate', function (next) {
+    this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } })
+    next()
+})
 
 // Exporting Student Model
 export const StudentModel = model<IStudent>('Student', studentSchema);
